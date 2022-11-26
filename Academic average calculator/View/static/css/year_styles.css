@@ -1,0 +1,21 @@
+.navbar{
+    margin-bottom: 3.5%;
+}
+
+.box-accordion{
+    margin-bottom: 15px;
+}
+
+.add-course-box{
+    margin : 10px;
+}
+
+.modal-button{
+    background: transparent;
+    border: none !important;
+    font-size:0;
+}
+
+table{
+    text-align: center;
+}

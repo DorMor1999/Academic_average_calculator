@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+    <title>Academic average calculator - Year {{year + 1}}</title>
+    {% include "common/header.html" %}
+    <link rel="stylesheet" href="../static/css/year_styles.css">
+
+        <div class="container-fluid">
+            {% if msg != "" %}
+                <div class="div-modal">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary modal-button " data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5 text-danger" id="exampleModalLabel">Error!</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-danger">
+                                    {{msg}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-12 ">
+                    <h1>Year {{year + 1}}</h1>
+                    <h4>Average: {{"{:.2f}".format(year_avg)}}</h4>
+                    <h4>Credits: {{"{:.2f}".format(year_credits)}}</h4>
+                    {% for semester in office.the_user.years[year].semesters: %}
+                    <div class="accordion accordion-flush border border-2 rounded-1 border-primary box-accordion"
+                         id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-heading{{semester.name}}">
+                                <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapse{{semester.name}}" aria-expanded="false"
+                                        aria-controls="flush-collapse{{semester.name}}">
+                                    Semester: {{semester.name}}<br>Average: {{"{:.2f}".format(semester.avg)}}<br>credits: {{"{:.2f}".format(semester.credits)}}
+                                </button>
+                            </h2>
+                            <div id="flush-collapse{{semester.name}}" class="accordion-collapse collapse"
+                                 aria-labelledby="flush-heading{{semester.name}}" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <h4>Details</h4>
+                                    <p>Semester: {{semester.name}}</p>
+                                    <p>Average: {{"{:.2f}".format(semester.avg)}}</p>
+                                    <p>credits: {{"{:.2f}".format(semester.credits)}}</p>
+
+
+                                    <table class="table table-striped table-hover table-light fs-5 border border-3">
+                                        <thead>
+                                        <tr>
+                                            <td class="bg-white">Course</td>
+                                            <td class="bg-white quantity-box">Credits</td>
+                                            <td class="bg-white price-box">Grade</td>
+                                            <td class="bg-white"></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for course in semester.courses: %}
+                                        <tr>
+                                            <td class="course-name">{{course.name}}</td>
+                                            <td class="credits-box">{{course.credits}}</td>
+                                            <td class="avg-box">{{course.grade}}</td>
+                                            <td>
+                                                <a href="{{url_for('remove_course', name=course.name, year= year + 1, semester=semester.name)}}"><button type="submit" value="{{course.name}}/{{semester.name}}" name="name/semester" class="btn btn-danger btn-lg">Delete</button></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="border border-3">
+                                        <h4 class="add-course-box">Add course</h4>
+                                        <form action="{{url_for('year', year= year + 1)}}" method="post">
+                                            <div class="row g-3">
+                                                <div class="col-4 add-course-box">
+                                                    <input id="name" type="text" class="form-control"
+                                                           placeholder="Course:" aria-label="Course" name="name">
+                                                </div>
+                                                <div class="col-3 add-course-box">
+                                                    <input id="credits" type="number" step="0.5" class="form-control"
+                                                           placeholder="Credits:" aria-label="Credits" name="credits">
+                                                </div>
+                                                <div class="col-3 add-course-box">
+                                                    <input id="grade" type="number" class="form-control"
+                                                           placeholder="Grade:" aria-label="Grade" name="grade">
+                                                </div>
+                                            </div>
+                                            <button type="submit" value="{{semester.name}}" name="semester" class="btn btn-outline-success add-course-box">
+                                                Add Course
+                                            </button>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    {% include "common/footer.html" %}
+    <script src="../static/js/modal year.js"></script>
+</body>
+</html>
